@@ -94,6 +94,16 @@ func (s *Style) BgMagenta() *Style { return s.add(BgMagenta) } // 洋红色
 func (s *Style) BgCyan() *Style    { return s.add(BgCyan) }    // 青色
 func (s *Style) BgWhite() *Style   { return s.add(BgWhite) }   // 白色
 
+// RGB 添加自定义RGB颜色
+func (s *Style) RGB(r, g, b int) *Style {
+	return s.add(RGB(r, g, b))
+}
+
+// BgRGB 添加自定义RGB背景色
+func (s *Style) BgRGB(r, g, b int) *Style {
+	return s.add(BgRGB(r, g, b))
+}
+
 // Sprint 返回带有样式的字符串
 func (s *Style) Sprint(a ...any) string {
 	if NoColor || len(s.codes) == 0 {
