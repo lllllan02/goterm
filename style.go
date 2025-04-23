@@ -6,6 +6,8 @@ import (
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/mattn/go-isatty"
 )
 
 // ANSI 颜色代码
@@ -39,25 +41,16 @@ const (
 
 // 全局配置
 var (
-	// 是否启用彩色输出
-	NoColor = false
+	// 是否启用彩色输出：
+	// 1. 设置 NO_COLOR 环境变量
+	// 2. 终端为 dumb 终端
+	// 3. 不是终端
+	NoColor = os.Getenv("NO_COLOR") != "" || os.Getenv("TERM") == "dumb" ||
+		(!isatty.IsTerminal(os.Stdout.Fd()) && !isatty.IsCygwinTerminal(os.Stdout.Fd()))
+
 	// 默认输出目标
 	Output io.Writer = os.Stdout
 )
-
-// 初始化函数，检查是否应该禁用彩色输出
-func init() {
-	// 检查是否设置NO_COLOR环境变量
-	if _, exists := os.LookupEnv("NO_COLOR"); exists {
-		NoColor = true
-		return
-	}
-
-	// 检查是否为终端输出
-	if fileInfo, _ := os.Stdout.Stat(); (fileInfo.Mode() & os.ModeCharDevice) == 0 {
-		NoColor = true
-	}
-}
 
 // Style 表示一个带有样式的字符串
 type Style struct {
@@ -135,6 +128,21 @@ func (s *Style) Printf(format string, a ...any) (n int, err error) {
 	return fmt.Fprint(Output, s.Sprintf(format, a...))
 }
 
+// Fprint 输出带样式的文本到指定的writer
+func (s *Style) Fprint(w io.Writer, a ...any) (n int, err error) {
+	return fmt.Fprint(w, s.Sprint(a...))
+}
+
+// Fprintln 输出带样式的文本到指定的 writer 并换行
+func (s *Style) Fprintln(w io.Writer, a ...any) (n int, err error) {
+	return fmt.Fprintln(w, s.Sprint(a...))
+}
+
+// Fprintf 输出带样式和格式的文本到指定的 writer
+func (s *Style) Fprintf(w io.Writer, format string, a ...any) (n int, err error) {
+	return fmt.Fprint(w, s.Sprintf(format, a...))
+}
+
 // RGB 创建自定义RGB颜色代码（仅支持真彩色终端）
 func RGB(r, g, b int) string {
 	return "\033[38;2;" + strconv.Itoa(r) + ";" + strconv.Itoa(g) + ";" + strconv.Itoa(b) + "m"
@@ -143,4 +151,9 @@ func RGB(r, g, b int) string {
 // BgRGB 创建自定义RGB背景色代码（仅支持真彩色终端）
 func BgRGB(r, g, b int) string {
 	return "\033[48;2;" + strconv.Itoa(r) + ";" + strconv.Itoa(g) + ";" + strconv.Itoa(b) + "m"
+}
+
+// SetWriter 设置全局输出目标
+func SetWriter(w io.Writer) {
+	Output = w
 }
