@@ -8,7 +8,7 @@ import (
 // TreeNode 表示树形结构的一个节点
 type TreeNode struct {
 	Name     string      // 节点名称
-	Value    interface{} // 节点值
+	Value    any         // 节点值
 	Children []*TreeNode // 子节点
 }
 
@@ -18,7 +18,7 @@ type Tree struct {
 }
 
 // NewTree 创建一个新的树形结构
-func NewTree(name string, value interface{}) *Tree {
+func NewTree(name string, value any) *Tree {
 	return &Tree{
 		Root: &TreeNode{
 			Name:  name,
@@ -28,7 +28,7 @@ func NewTree(name string, value interface{}) *Tree {
 }
 
 // AddChild 添加子节点
-func (t *TreeNode) AddChild(name string, value interface{}) *TreeNode {
+func (t *TreeNode) AddChild(name string, value any) *TreeNode {
 	child := &TreeNode{
 		Name:  name,
 		Value: value,
@@ -119,38 +119,4 @@ func (t *Tree) Print() {
 // PrintWithStyle 使用样式打印树形结构
 func (t *Tree) PrintWithStyle(style *Style) {
 	fmt.Print(style.Sprint(t.String()))
-}
-
-// 示例：创建树形结构
-func ExampleTree() {
-	// 创建目录结构示例
-	dirTree := NewTree("project", nil)
-	src := dirTree.Root.AddChild("src", nil)
-	src.AddChild("main.go", nil)
-	utils := src.AddChild("utils", nil)
-	utils.AddChild("logger.go", nil)
-	utils.AddChild("style.go", nil)
-	examples := src.AddChild("examples", nil)
-	examples.AddChild("main.go", nil)
-	dirTree.Root.AddChild("README.md", nil)
-	dirTree.Root.AddChild("go.mod", nil)
-
-	// 打印目录结构
-	dirTree.Print()
-
-	// 创建系统状态示例
-	sysTree := NewTree("系统状态", nil)
-	cpu := sysTree.Root.AddChild("CPU使用率", nil)
-	cpu.AddChild("用户态", "45%")
-	cpu.AddChild("系统态", "15%")
-	cpu.AddChild("空闲", "40%")
-	mem := sysTree.Root.AddChild("内存使用", nil)
-	mem.AddChild("已用", "4.2GB")
-	mem.AddChild("可用", "2.8GB")
-	disk := sysTree.Root.AddChild("磁盘空间", nil)
-	disk.AddChild("已用", "120GB")
-	disk.AddChild("可用", "80GB")
-
-	// 使用样式打印系统状态
-	sysTree.PrintWithStyle(New().Bold().Blue())
 }

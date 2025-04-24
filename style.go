@@ -167,3 +167,9 @@ func BgRGB(r, g, b int) string {
 func SetWriter(w io.Writer) {
 	Output = w
 }
+
+// Reset 重置所有样式
+func (s *Style) Reset() *Style {
+	s.codes = []string{}
+	return s
+}
