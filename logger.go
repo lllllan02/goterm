@@ -14,6 +14,21 @@ var (
 	PrefixRemark  = New().Bold().Cyan().Sprint("REMARK")
 )
 
+// 全局活跃进度条（用于日志自动适配到进度条）
+var (
+	activeProgressBar *ProgressBar
+)
+
+// SetActiveProgressBar 设置当前活跃的进度条，所有日志将自动输出到此进度条
+func SetActiveProgressBar(bar *ProgressBar) {
+	activeProgressBar = bar
+}
+
+// ClearActiveProgressBar 清除当前活跃的进度条
+func ClearActiveProgressBar() {
+	activeProgressBar = nil
+}
+
 // 获取不带ANSI转义码的字符串长度
 func getPlainLength(s string) int {
 	length := 0
@@ -50,42 +65,92 @@ func formatLog(prefix string, message string) string {
 
 // 全局快捷函数 - 预设样式
 func Error(a ...any) string {
-	return formatLog(PrefixError, fmt.Sprint(a...))
+	msg := formatLog(PrefixError, fmt.Sprint(a...))
+	// 如果有活跃的进度条，则自动写入进度条
+	if activeProgressBar != nil && activeProgressBar.Type == BarTypeSticky {
+		activeProgressBar.Log("%s", msg)
+	}
+	return msg
 }
 
 func Success(a ...any) string {
-	return formatLog(PrefixSuccess, fmt.Sprint(a...))
+	msg := formatLog(PrefixSuccess, fmt.Sprint(a...))
+	// 如果有活跃的进度条，则自动写入进度条
+	if activeProgressBar != nil && activeProgressBar.Type == BarTypeSticky {
+		activeProgressBar.Log("%s", msg)
+	}
+	return msg
 }
 
 func Warning(a ...any) string {
-	return formatLog(PrefixWarning, fmt.Sprint(a...))
+	msg := formatLog(PrefixWarning, fmt.Sprint(a...))
+	// 如果有活跃的进度条，则自动写入进度条
+	if activeProgressBar != nil && activeProgressBar.Type == BarTypeSticky {
+		activeProgressBar.Log("%s", msg)
+	}
+	return msg
 }
 
 func Info(a ...any) string {
-	return formatLog(PrefixInfo, fmt.Sprint(a...))
+	msg := formatLog(PrefixInfo, fmt.Sprint(a...))
+	// 如果有活跃的进度条，则自动写入进度条
+	if activeProgressBar != nil && activeProgressBar.Type == BarTypeSticky {
+		activeProgressBar.Log("%s", msg)
+	}
+	return msg
 }
 
 func Remark(a ...any) string {
-	return formatLog(PrefixRemark, fmt.Sprint(a...))
+	msg := formatLog(PrefixRemark, fmt.Sprint(a...))
+	// 如果有活跃的进度条，则自动写入进度条
+	if activeProgressBar != nil && activeProgressBar.Type == BarTypeSticky {
+		activeProgressBar.Log("%s", msg)
+	}
+	return msg
 }
 
 // 全局快捷函数 - 格式化输出
 func Errorf(format string, a ...any) string {
-	return formatLog(PrefixError, fmt.Sprintf(format, a...))
+	msg := formatLog(PrefixError, fmt.Sprintf(format, a...))
+	// 如果有活跃的进度条，则自动写入进度条
+	if activeProgressBar != nil && activeProgressBar.Type == BarTypeSticky {
+		activeProgressBar.Log("%s", msg)
+	}
+	return msg
 }
 
 func Successf(format string, a ...any) string {
-	return formatLog(PrefixSuccess, fmt.Sprintf(format, a...))
+	msg := formatLog(PrefixSuccess, fmt.Sprintf(format, a...))
+	// 如果有活跃的进度条，则自动写入进度条
+	if activeProgressBar != nil && activeProgressBar.Type == BarTypeSticky {
+		activeProgressBar.Log("%s", msg)
+	}
+	return msg
 }
 
 func Warningf(format string, a ...any) string {
-	return formatLog(PrefixWarning, fmt.Sprintf(format, a...))
+	msg := formatLog(PrefixWarning, fmt.Sprintf(format, a...))
+	// 如果有活跃的进度条，则自动写入进度条
+	if activeProgressBar != nil && activeProgressBar.Type == BarTypeSticky {
+		activeProgressBar.Log("%s", msg)
+	}
+	return msg
 }
 
 func Infof(format string, a ...any) string {
-	return formatLog(PrefixInfo, fmt.Sprintf(format, a...))
+	msg := formatLog(PrefixInfo, fmt.Sprintf(format, a...))
+	// 如果有活跃的进度条，则自动写入进度条
+	if activeProgressBar != nil && activeProgressBar.Type == BarTypeSticky {
+		activeProgressBar.Log("%s", msg)
+	}
+	return msg
 }
 
 func Remarkf(format string, a ...any) string {
-	return formatLog(PrefixRemark, fmt.Sprintf(format, a...))
+	msg := formatLog(PrefixRemark, fmt.Sprintf(format, a...))
+	// 如果有活跃的进度条，则自动写入进度条
+	if activeProgressBar != nil && activeProgressBar.Type == BarTypeSticky {
+		activeProgressBar.Log("%s", msg)
+	}
+	return msg
 }
