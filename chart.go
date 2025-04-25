@@ -554,7 +554,6 @@ func (c *LineChart) String() string {
 
 	// 找出所有点的X和Y的最大最小值
 	var xMin, xMax, yMin, yMax float64
-	var allXValues []float64
 	first := true
 
 	for series, points := range c.Data {
@@ -586,7 +585,6 @@ func (c *LineChart) String() string {
 				yMin = math.Min(yMin, p.Y)
 				yMax = math.Max(yMax, p.Y)
 			}
-			allXValues = append(allXValues, p.X)
 		}
 	}
 
